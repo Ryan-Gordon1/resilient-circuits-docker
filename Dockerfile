@@ -15,10 +15,14 @@ LABEL maintainer="ryan.gordon1@ibm.com"
 COPY requirements.txt /
 
 # Install the requirements
-RUN pip install -r /requirements.txt
+RUN pip install -r requirements.txt
 
+COPY install_integrations_public_git.sh /
+RUN bash install_integrations_public_git.sh
 # Expose 80 also in some cases
-EXPOSE 443, 65000
+EXPOSE 443
+EXPOSE 9443
+EXPOSE 65000
 
 # Optionally could try using volumes
 #VOLUME ["/root/.resilient/"]
