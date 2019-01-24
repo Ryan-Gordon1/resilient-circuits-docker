@@ -21,11 +21,14 @@ function buildCommApps () {
     do
     echo $integration
     
-    #full_path="${RC_APPS}/${integration}/"
-    #pkg_dir=$(dirname "$full_path")
-    #echo ">>> $pkg_dir";
-    #(cd "${RC_APPS}/${integration}/" && python setup.py develop);
+    full_path="${RC_APPS}/${integration}/"
+    pkg_dir=$(dirname "$full_path")
+    echo ">>> $pkg_dir";
+    (cd "${RC_APPS}/${integration}/" && python setup.py develop);
     done
+
+    echo ">>> Removing repo"
+    rm -rf ${RC_APPS}
 }
 #Variables
 declare -a GIT_LIBS=("fn_whois" "fn_ipinfo")
