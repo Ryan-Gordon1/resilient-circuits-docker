@@ -10,7 +10,7 @@ LABEL maintainer="ryan.gordon1@ibm.com"
 
 # Add compiler support
 RUN apk add --no-cache --virtual .build-deps build-base gcc abuild binutils libffi libffi-dev openssl openssl-dev bash git \
-  && apk add --no-cache su-exec 
+ && apk add --no-cache su-exec 
 
 # Install Resilient Circuits
 COPY requirements.txt /  
@@ -20,13 +20,10 @@ RUN pip install -r requirements.txt
 COPY install_integrations_public_git.sh /
 RUN bash install_integrations_public_git.sh  && apk del .build-deps
 
-# Expose 80 also in some cases
-EXPOSE 443
-EXPOSE 9443
-EXPOSE 65000
+# Mount /app at runtime  
+ENV APP_CONFIG_FILE /app/config/app.config
 
-# Optionally could try using volumes
-#VOLUME ["/root/.resilient/"]
+WORKDIR /app
 
 # Start resilient-circuits
 CMD ["resilient-circuits", "run"]
