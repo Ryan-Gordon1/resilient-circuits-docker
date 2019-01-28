@@ -1,34 +1,26 @@
 #!/bin/bash
 
-
-# collect all the public facing community apps and package as source distributions (tar.gz files)
-function buildCommApps {
-    RC_APPS="${TMP_DIR}/resilient-community-apps"
-    #
-    if [ -d ${RC_APPS} ]; then
-    rm -Rf ${RC_APPS}
-    fi
-    #
-    echo ">>> Integrations to be installed : ${3}";
-    git clone -b master https://github.com/ibmresilient/resilient-community-apps ${RC_APPS};
-    # find all packages with a setup.py file to build
-
-    for integration in $3;
-    do
-    echo $integration
-    echo $3
-    full_path="${RC_APPS}/${integration}/"
-    pkg_dir=$(dirname "$full_path")
-    echo ">>> $pkg_dir";
-    (cd "${RC_APPS}/${integration}/" && python setup.py develop);
-    done
-}
 #Variables
 declare -a GIT_LIBS=("fn_whois" "fn_ipinfo")
-RESILIENT_COMM_APPS='git@github.ibm.com:Resilient/resilient-community-apps.git'
-REPO_BRANCH=master
-TMP_DIR='/tmp'
+BUILD_DIR="/tmp/resilient-community-apps"
 
+echo ">>> Integrations to be installed : ${GIT_LIBS[@]}";
 
-# add community apps
-buildCommApps ${RESILIENT_COMM_APPS} ${REPO_BRANCH} ${GIT_LIBS}
+# Remove any previous checkout (there should not be but just in case)
+if [ -d ${BUILD_DIR} ]; then
+    rm -rf ${BUILD_DIR}
+fi
+
+# Clone the GIT repo 
+git clone -b master https://github.com/ibmresilient/resilient-community-apps ${BUILD_DIR};
+
+# find all packages with a setup.py file to build
+for INTEGRATION in ${GIT_LIBS[@]};
+do  
+    echo ">>> Installing ${INTEGRATION}";
+    (cd "${BUILD_DIR}/${INTEGRATION}/" && python setup.py install);
+done
+
+# Remove the repo/cleanup
+echo ">>> Cleaning up"
+rm -rf ${BUILD_DIR}

@@ -16,7 +16,7 @@ docker build -t resilient-circuits .
 Which will build an image called `resilient-circuits`. We can then run a containor based on this image using :
 
 ```bash
-docker run resilient-circuits
+docker run --rm -v /path/to/app/data:/app resilient-circuits
 ```
 
 #### Opening ports on demand
