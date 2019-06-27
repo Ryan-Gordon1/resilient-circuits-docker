@@ -1,42 +1,49 @@
-# res-circuits-docker
-A DockerFile build of resilient, resilient-circuits and steps to include other packages
+# Resilient Circuits in Docker
+## Craig Roberts & Ryan Gordon
 
-## Installation and Build Notes
+## Building the Container 
 
-### Getting Started
+Clone this repository to a server or system you want to run it on. 
 
-This repo has almost everything you need to run a containerised version of a resilient-circuits instance.
+>`git clone <url>`
 
-To build this Dockerfile into an image run :
+>`cd ./resilient_circuits_docker`
 
-```bash
-docker build -t resilient-circuits .
+Now we need to configure it for our integrations, in the integration_list.txt use the integration name from the [Github Repository](https://github.com/ibmresilient/resilient-community-apps), each integration should be on a seperate line. 
+
+>_Note_ If you are using your own custom repository then you can change it in the build.sh at the top of the file.
+
+Run the build script.
+
+>`./build.sh`
+
+This will build the container image - you will it if you run `docker images` it will look like the following. 
+
+```
+~$ docker images
+REPOSITORY           TAG                 IMAGE ID
+resilient_circuits   latest              40c3443d5cd1    
 ```
 
-Which will build an image called `resilient-circuits`. We can then run a containor based on this image using :
+This means you have packaged it ready for production - you can move this to another server or push it into an enterprise docker registry etc. 
 
-```bash
-docker run --rm -v /path/to/app/data:/app resilient-circuits
+In this case we are starting simple so we are going to launch it on the host. 
+
+## Configuring the container host 
+
+You need to make sure you have an app config somewhere on the server - this must have the bare minimum configuration of below. On startup of the container it will run resilient-circuits config -u to check you have all the app configs loaded too. 
+
+```
+[resilient]
+host=resilient.example.com
+port=443
+email=email@example.com
+org=Example
+password=secret
 ```
 
-#### Opening ports on demand
+## Running the container 
 
-Depending on which integrations you want to use with Resilient Circuits, you may need to open more ports to enable these integrations to work. Examples of this are integrations which use different protocols such as AMQP. To open a port: edit the Docker run command with a `--port` flag followed by which port pair you want to open. 
+>`docker run --rm -v /some/path/.resilient:/app resilient_circuits`
 
-Example :
-
-```bash
-docker run --port 8080:80
-```
-
-This example will open port 80 on the containor (right side) and then publish it on port 8080 of the host machine (left side.)
-
-## Extra Notes
-
-### Adding other PyPi packages needed by your circuits integrations
-
-Very often you will need to depend on another package such as requests, lxml or some package specific to a product.
-The easiest way to have these packages built out and installed into the container is through the use of the provided `requirements.txt` file.
-Any dependancies you need can be appended to this file, one per line. 
-
-Specific versions can be specified using `package==1.0.0`.
+You will see Resilient Circuits Start. 
