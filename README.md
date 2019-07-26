@@ -23,8 +23,9 @@ Contributions of Dockerfiles for new images are welcome.
 ### Running
 Create a valid app.config in the `circuits` directory and run your integration container, for example
 ```
-docker run -rm -d -v $PWD/circuits:/etc/circuits circuits-fn-whois
+docker run --rm -d -v $PWD/circuits:/etc/circuits --name circuits-fn-whois circuits-fn-whois
 ```
+To watch its logs use `docker logs -f circuits-fn-whois`.  To kill it `docker kill circuits-fn-whois`.
 
 ## Building the Container - the old way
 
