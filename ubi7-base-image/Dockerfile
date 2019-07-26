@@ -13,6 +13,9 @@ RUN pip install --upgrade pip && \
 
 # Set up configuration and log locations using /etc and /var/log, the conventional locations for config and logs
 RUN mkdir /etc/circuits
+ENV APP_CONFIG_FILE /etc/circuits/app.config
+
+RUN mkdir /var/log/circuits
 ENV APP_LOG_DIR /var/log/circuits
 
 # Entrypoint for circuits.  Use /opt, the conventional location for optional software on Linux
