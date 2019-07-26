@@ -1,0 +1,3 @@
+[submodule "resilient-community-apps"]
+	path = resilient-community-apps
+	url = git@github.com:ibmresilient/resilient-community-apps.git
