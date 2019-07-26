@@ -1,0 +1,7 @@
+# Default to use a local instance of base image
+FROM circuits-ubi7-31
+RUN mkdir /tmp/integration && \
+  git clone -b master https://github.com/ibmresilient/resilient-community-apps /tmp/integration
+
+RUN cd /tmp/integration/fn_whois && \
+  python setup.py install
