@@ -3,7 +3,7 @@ FROM registry.access.redhat.com/ubi7/python-36
 
 # update to latest packages, user 0 for root privilege
 USER 0
-RUN yum -y update && yum clean
+RUN yum -y update && yum clean all
 
 # Get latest pip and install circuits
 RUN pip install --upgrade pip && \
