@@ -5,9 +5,9 @@
 The public [resilient-community-apps](https://github.com/ibmresilient/resilient-community-apps) github repo is a git submodule of this repo.
 It's configured to use the master branch.
 It's not cloned by default - because it's quite big. 
-To clone it run the following commands from the root of this repo: `git submodule init; git submodule update`
+To clone it, run the following commands from the root of this repo: `git submodule init; git submodule update`
 
-Once it's cloned you can get the latest code or changes branches of _resilient-community-apps_ by `cd`'ing into `resilient-community-apps` and running the usual git commands.
+Once it's cloned you can get the latest code or change branches of _resilient-community-apps_ by `cd`'ing into `resilient-community-apps` and running the usual git commands.
 The commands will operate against resilient-community-apps repo.  For example `git fetch`, `git pull`, `git checkout` and so on.
  
 ## Building the Container 
