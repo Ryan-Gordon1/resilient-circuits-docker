@@ -1,7 +1,32 @@
 # Resilient Circuits in Docker
 ## Craig Roberts & Ryan Gordon
 
-## Building the Container 
+## Building images and running containers - the new way
+### Building
+A circuits base image is built using either alpine or Red Hat's Univeral Base Image (ubi) base.
+This contains the required OS and python packages and circuits as well as some default locations for `app.config`
+The Dockerfiles for these are in the `<os-base>-base-image` directories.
+
+To build a circuits base image called `circuits-ubi7-31` (circuits from RHEL UBI7 with circuits 31) run:
+```
+docker build -t circuits-ubi7-31 -f ubi7-base-image/Dockerfile .
+```
+
+To build an image with a given integration installed either use the Dockerfiles in `integration-images` directory or
+create a new Docerfile.  For example:  
+```
+docker build -t circuits-fn-whois -f integration-images/Dockerfile-fn-whois .
+```
+
+Contributions of Dockerfiles for new images are welcome.
+
+### Running
+Create a valid app.config in the `circuits` directory and run your integration container, for example
+```
+docker run -rm -d -v $PWD/circuits:/etc/circuits circuits-fn-whois
+```
+
+## Building the Container - the old way
 
 Clone this repository to a server or system you want to run it on. 
 
