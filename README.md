@@ -1,6 +1,14 @@
 # Resilient Circuits in Docker
 ## Craig Roberts & Ryan Gordon
 
+## Using resilient-community-apps submodule
+The public [resilient-community-apps](https://github.com/ibmresilient/resilient-community-apps) github repo is a git submodule of this repo.
+It's configured to use the master branch.
+It's not cloned by default - because it's quite big. 
+To clone it, run the following commands from the root of this repo: `git submodule init; git submodule update`
+
+Once it's cloned you can get the latest code or change branches of _resilient-community-apps_ by `cd`'ing into `resilient-community-apps` and running the usual git commands.
+The commands will operate against resilient-community-apps repo.  For example `git fetch`, `git pull`, `git checkout` and so on.
 ## Building images and running containers - the new way
 ### Building
 A circuits base image is built using either alpine or Red Hat's Univeral Base Image (ubi) base.
@@ -28,15 +36,6 @@ docker run --rm -d -v $PWD/circuits:/etc/circuits --name circuits-fn-whois circu
 To watch its logs use `docker logs -f circuits-fn-whois`.  To kill it `docker kill circuits-fn-whois`.
 
 ## Building the Container - the old way
-=======
-## Using resilient-community-apps submodule
-The public [resilient-community-apps](https://github.com/ibmresilient/resilient-community-apps) github repo is a git submodule of this repo.
-It's configured to use the master branch.
-It's not cloned by default - because it's quite big. 
-To clone it, run the following commands from the root of this repo: `git submodule init; git submodule update`
-
-Once it's cloned you can get the latest code or change branches of _resilient-community-apps_ by `cd`'ing into `resilient-community-apps` and running the usual git commands.
-The commands will operate against resilient-community-apps repo.  For example `git fetch`, `git pull`, `git checkout` and so on.
  
 ## Building the Container 
 
