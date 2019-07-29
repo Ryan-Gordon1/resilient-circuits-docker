@@ -1,0 +1,10 @@
+[resilient]
+host=resilient.example.com
+port=443
+email=email@example.com
+# name of the organisation
+org=Example
+password=secret
+# set a cacert file for non trusted certifcates or set to false if don't want to verfiy certificates
+#cafile=/etc/circuits/resilient-host-cacerts.pem
+#cafile=false

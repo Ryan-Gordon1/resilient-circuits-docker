@@ -9,6 +9,33 @@ To clone it, run the following commands from the root of this repo: `git submodu
 
 Once it's cloned you can get the latest code or change branches of _resilient-community-apps_ by `cd`'ing into `resilient-community-apps` and running the usual git commands.
 The commands will operate against resilient-community-apps repo.  For example `git fetch`, `git pull`, `git checkout` and so on.
+## Building images and running containers - the new way
+### Building
+A circuits base image is built using either alpine or Red Hat's Univeral Base Image (ubi) base.
+This contains the required OS and python packages and circuits as well as some default locations for `app.config`
+The Dockerfiles for these are in the `<os-base>-base-image` directories.
+
+To build a circuits base image called `circuits-ubi7-31` (circuits from RHEL UBI7 with circuits 31) run:
+```
+docker build -t circuits-ubi7-31 -f ubi7-base-image/Dockerfile .
+```
+
+To build an image with a given integration installed either use the Dockerfiles in `integration-images` directory or
+create a new Docerfile.  For example:  
+```
+docker build -t circuits-fn-whois -f integration-images/Dockerfile-fn-whois .
+```
+
+Contributions of Dockerfiles for new images are welcome.
+
+### Running
+Create a valid app.config in the `circuits` directory and run your integration container, for example
+```
+docker run --rm -d -v $PWD/circuits:/etc/circuits --name circuits-fn-whois circuits-fn-whois
+```
+To watch its logs use `docker logs -f circuits-fn-whois`.  To kill it `docker kill circuits-fn-whois`.
+
+## Building the Container - the old way
  
 ## Building the Container 
 

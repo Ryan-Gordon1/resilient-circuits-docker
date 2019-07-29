@@ -1,0 +1,7 @@
+# Default to use a local instance of base image
+FROM circuits-ubi7-31
+RUN mkdir /opt/circuits/resilient-community-apps
+COPY ./resilient-community-apps/fn_whois /opt/circuits/resilient-community-apps/fn_whois
+
+RUN cd /opt/circuits/resilient-community-apps/fn_whois && \
+  pip install .
