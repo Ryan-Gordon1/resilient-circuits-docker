@@ -1,0 +1,4 @@
+[submodule "resilient-community-apps"]
+	path = resilient-community-apps
+	branch = master
+	url = git@github.com:ibmresilient/resilient-community-apps.git
