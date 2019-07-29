@@ -1,5 +1,5 @@
-# Building on top of 3.6 image as resilient circuits is just a python app
-FROM python:3.6-alpine
+# Building on top of 3.7 image as resilient circuits is just a python app
+FROM python:3.7-alpine
 
 # Label the maintainers / authors
 LABEL authors="craig.roberts@uk.ibm.com,ryan.gordon1@ibm.com,simon.bradish@ibm.com"

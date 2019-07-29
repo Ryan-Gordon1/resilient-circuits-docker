@@ -1,5 +1,5 @@
 # Base image with required OS packages
-FROM python:3.6-alpine
+FROM python:3.7-alpine
 
 # required packages add in alphabetical order for easier reading
 RUN apk update && \
