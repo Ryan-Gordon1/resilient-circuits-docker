@@ -1,7 +1,14 @@
 # Default to use a local instance of base image
-FROM circuits-ubi7-31
+FROM circuits-ubi7:34
+
+# root user to allow creation of directory and run pip install
+USER 0
 RUN mkdir /opt/circuits/resilient-community-apps
 COPY ./resilient-community-apps/fn_whois /opt/circuits/resilient-community-apps/fn_whois
 
 RUN cd /opt/circuits/resilient-community-apps/fn_whois && \
   pip install .
+
+# arbitrary user, support running as non-root.  Required on OpenShift.
+# Generally a good practice.
+USER 1001
