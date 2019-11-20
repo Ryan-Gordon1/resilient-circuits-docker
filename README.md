@@ -15,9 +15,9 @@ A circuits base image is built using either alpine or Red Hat's Univeral Base Im
 This contains the required OS and python packages and circuits as well as some default locations for `app.config`
 The Dockerfiles for these are in the `<os-base>-base-image` directories.
 
-To build a circuits base image called `circuits-ubi7-31` (circuits from RHEL UBI7 with circuits 31) run:
+To build a circuits base image called `circuits-ubi7:34` (circuits from RHEL UBI7 with circuits 34) run:
 ```
-docker build -t circuits-ubi7-31 -f ubi7-base-image/Dockerfile .
+docker build -t circuits-ubi7:34 -f ubi7-base-image/Dockerfile .
 ```
 
 To build an image with a given integration installed either use the Dockerfiles in `integration-images` directory or
