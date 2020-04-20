@@ -17,9 +17,9 @@ RUN apk update && \
 
 # Get latest pip and install circuits
 RUN pip install --upgrade pip && \
-  pip install resilient>=31.0.0 \
-    resilient-circuits>=31.0.0 \
-    resilient-lib>=31.0.0
+  pip install resilient>=34.0.195 \
+    resilient-circuits>=34.0.195 \
+    resilient-lib>=34.0.195
 
 # Set up configuraiton and log locations using /etc and /var/log, the conventional locations for config and logs
 RUN mkdir /etc/circuits
