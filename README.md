@@ -1,7 +1,18 @@
 # Resilient Circuits in Docker
 ## Craig Roberts & Ryan Gordon
 
+
+This repository is a community submission detailing how you can use Docker to containerize an integration for Resilient Circuits. 
+Integrations used with resilient_circuits are Python packages which are typically installed before use and Circuits itself is also a Python package. 
+Through this repo you can instead pre-prepare a number of Docker images which can then be repeatedly deployed with both the integration code and an instance of resilient_circuits.
+
+One benefit to this approach is how dependencies for each integration are isolated within that specific image reducing the chances of dependency conflict when using more than 1 integration.
+
+Configuration options such as credentials are handled in the same way as expected; through an app.config file with the difference being that this file is mounted to each docker container as a volume. [More on Docker Volumes](https://docs.docker.com/storage/volumes/)
+
 ## Using resilient-community-apps submodule
+Included with this repo is a submodule link to the resilient-community-apps repo giving you access to existing integrations which can be wrapped as Docker containers.
+
 The public [resilient-community-apps](https://github.com/ibmresilient/resilient-community-apps) github repo is a git submodule of this repo.
 It's configured to use the master branch.
 It's not cloned by default - because it's quite big. 
@@ -9,9 +20,31 @@ To clone it, run the following commands from the root of this repo: `git submodu
 
 Once it's cloned you can get the latest code or change branches of _resilient-community-apps_ by `cd`'ing into `resilient-community-apps` and running the usual git commands.
 The commands will operate against resilient-community-apps repo.  For example `git fetch`, `git pull`, `git checkout` and so on.
-## Building images and running containers - the new way
-### Building
-A circuits base image is built using either alpine or Red Hat's Univeral Base Image (ubi) base.
+
+# Building images and running containers
+Provided in this README is two methods for build images. 
+
+The first involves a more standards-orientated setup, using Red Hat UBI as the base image for a resilient_circuits image.
+The resilient_circuits image; tagged `circuits-ubi7` in this project is then further built upon for each specific integration. 
+This means all integration images use `circuits-ubi7` which in turn uses `registry.access.redhat.com/ubi7/python-36` as its base image.
+
+Link: [Building images and running containers - Red Hat UBI](#building-images-and-running-containers---red-hat-ubi)
+
+The second method provides a more basic all-in approach, where `python:3.7-alpine` is used as the base image.
+In this case, a script `install.sh` is used to install needed packages and also both resilient_circuits and any specified integrations from `resilient-community-apps`
+Before finishing some build dependancies are removed to try and keep the image size lean.
+
+Through this second method the default behavior is you will end up with 1 docker image containing all your specified integrations and gives you a very portable integration server.
+
+Link: [Building images and running containers - Alpine and Python](#building-images-and-running-containers---alpine-and-python)
+
+
+
+## Building images and running containers - Red Hat UBI 
+### Building the images 
+
+A circuits base image is built using either alpine or Red Hat's Universal Base Image (ubi) base.
+
 This contains the required OS and python packages and circuits as well as some default locations for `app.config`
 The Dockerfiles for these are in the `<os-base>-base-image` directories.
 
@@ -21,7 +54,8 @@ docker build -t circuits-ubi7:34 -f ubi7-base-image/Dockerfile .
 ```
 
 To build an image with a given integration installed either use the Dockerfiles in `integration-images` directory or
-create a new Docerfile.  For example:  
+create a new Dockerfile.  For example: 
+
 ```
 docker build -t circuits-fn-whois -f integration-images/Dockerfile-fn-whois .
 ```
@@ -35,7 +69,7 @@ docker run --rm -d -v $PWD/circuits:/etc/circuits --name circuits-fn-whois circu
 ```
 To watch its logs use `docker logs -f circuits-fn-whois`.  To kill it `docker kill circuits-fn-whois`.
 
-## Building the Container - the old way
+## Building images and running containers - Alpine and Python
  
 ## Building the Container 
 
@@ -45,7 +79,7 @@ Clone this repository to a server or system you want to run it on.
 
 >`cd ./resilient_circuits_docker`
 
-Now we need to configure it for our integrations, in the integration_list.txt use the integration name from the [Github Repository](https://github.com/ibmresilient/resilient-community-apps), each integration should be on a seperate line. 
+Now we need to configure it for our integrations, in the integration_list.txt use the integration name from the [Github Repository](https://github.com/ibmresilient/resilient-community-apps), each integration should be on a separate line. 
 
 >_Note_ If you are using your own custom repository then you can change it in the build.sh at the top of the file.
 
@@ -53,7 +87,9 @@ Run the build script.
 
 >`./build.sh`
 
-This will build the container image - you will it if you run `docker images` it will look like the following. 
+This build script installs all specified integrations through the public Resilient-community-apps repo. Additionally it attempts to install all integration packages left in the `assets/integrations` directory giving a way to setup the docker image offline.
+
+This will build the container image - this should be visible after building through `docker images` it will look like the following. 
 
 ```
 ~$ docker images

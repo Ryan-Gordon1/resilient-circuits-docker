@@ -28,21 +28,28 @@ do
     (cd "${BUILD_DIR}/${INTEGRATION}/" && python setup.py install);
 done
 
-# Install any standalone packages 
-INTEGRATION_FILES=/tmp/integrations/*.zip
-for f in ${INTEGRATION_FILES}
-do
-    echo "Installing package $f"
-    pip install $f
-done
 
-# Install any standalone packages 
-INTEGRATION_FILES=/tmp/integrations/*.tar.gz
-for f in ${INTEGRATION_FILES}
-do
-    echo "Installing package $f"
-    pip install $f
-done
+if [ -d "/tmp/integrations/" ] 
+then
+    # Install any standalone packages 
+    INTEGRATION_FILES=/tmp/integrations/*.zip
+    for f in ${INTEGRATION_FILES}
+    do
+        echo "Installing package $f"
+        pip install $f
+    done
+
+    # Install any standalone packages 
+    INTEGRATION_FILES=/tmp/integrations/*.tar.gz
+    for f in ${INTEGRATION_FILES}
+    do
+        echo "Installing package $f"
+        pip install $f
+    done
+ 
+else
+    echo "Error: Directory /path/to/dir does not exists."
+fi
 
 export APP_CONFIG_FILE="/tmp/app.config" 
 
