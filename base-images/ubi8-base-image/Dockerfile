@@ -1,6 +1,8 @@
 # Base image using Red Hat's universal base image (rhel 8) for python
 FROM registry.access.redhat.com/ubi8/python-36:latest
 
+ARG RES_CIRCUITS_VERSION=34.0.195
+
 # Update to latest packages, user 0 for root privilege
 USER 0
 RUN yum -y update && yum clean all
@@ -9,7 +11,7 @@ RUN yum -y update && yum clean all
 RUN pip install --upgrade pip
 
 # Install circuits
-RUN  pip install resilient-circuits>=34.0.195
+RUN pip install resilient-circuits>=${RES_CIRCUITS_VERSION}
 
 
 # Set up configuration and log locations using /etc and /var/log, the conventional locations for config and logs

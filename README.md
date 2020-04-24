@@ -1,6 +1,7 @@
 # Resilient Circuits in Docker
-## Craig Roberts & Ryan Gordon
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+![IBM Security](./assets/IBM_Security_lockup_pos_RGB.png)
+
 
 - [Resilient Circuits in Docker](#resilient-circuits-in-docker)
   - [Overview](#overview)
@@ -142,7 +143,7 @@ password=secret
 
 ### Running the container 
 
->`docker run --rm -v /some/path/.resilient:/app resilient_circuits`
+>`docker run --rm -v /some/path/.resilient:/etc/circuits resilient_circuits`
 
 You will see Resilient Circuits Start. 
 
