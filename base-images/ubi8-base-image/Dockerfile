@@ -1,4 +1,4 @@
-# Base image using Red Hat's universal base image (rhel 7) for python
+# Base image using Red Hat's universal base image (rhel 8) for python
 FROM registry.access.redhat.com/ubi8/python-36:latest
 
 # Update to latest packages, user 0 for root privilege

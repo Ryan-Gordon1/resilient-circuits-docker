@@ -1,7 +1,22 @@
 # Resilient Circuits in Docker
 ## Craig Roberts & Ryan Gordon
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+- [Resilient Circuits in Docker](#resilient-circuits-in-docker)
+  - [Overview](#overview)
+  - [Whats in this repository](#whats-in-this-repository)
+  - [Using resilient-community-apps submodule](#using-resilient-community-apps-submodule)
+- [Building images and running containers](#building-images-and-running-containers)
+  - [Building images and running containers - Red Hat UBI](#building-images-and-running-containers---red-hat-ubi)
+    - [Building the images](#building-the-images)
+    - [Running the container](#running-the-container)
+  - [Building images and running containers - Alpine and Python](#building-images-and-running-containers---alpine-and-python)
+    - [Building the Images](#building-the-images-1)
+    - [Configuring the container host](#configuring-the-container-host)
+    - [Running the container](#running-the-container-1)
+  - [Note on entrypoints](#note-on-entrypoints)
 
+## Overview
 This repository is a community submission detailing how you can use Docker to containerize an integration for Resilient Circuits. 
 Integrations used with resilient_circuits are Python packages which are typically installed before use and Circuits itself is also a Python package. 
 Through this repo you can instead pre-prepare a number of Docker images which can then be repeatedly deployed with both the integration code and an instance of resilient_circuits.
@@ -9,6 +24,17 @@ Through this repo you can instead pre-prepare a number of Docker images which ca
 One benefit to this approach is how dependencies for each integration are isolated within that specific image reducing the chances of dependency conflict when using more than 1 integration.
 
 Configuration options such as credentials are handled in the same way as expected; through an app.config file with the difference being that this file is mounted to each docker container as a volume. [More on Docker Volumes](https://docs.docker.com/storage/volumes/)
+
+
+## Whats in this repository 
+
+There are a number of ways you can use docker and resilient_circuits. In this repo we cover: 
+
++ Creating a minimal image of resilient_circuits with alpine or python base images
++ Creating a resilient_circuits image based on the Redhat Universal Base Image format. 
+  - A Dockerfile file is provided for both UBI 7 and 8
++ Creating an image based on one of the above bases which contains a given integration or app.
+
 
 ## Using resilient-community-apps submodule
 Included with this repo is a submodule link to the resilient-community-apps repo giving you access to existing integrations which can be wrapped as Docker containers.
@@ -32,7 +58,7 @@ Link: [Building images and running containers - Red Hat UBI](#building-images-an
 
 The second method provides a more basic all-in approach, where `python:3.7-alpine` is used as the base image.
 In this case, a script `install.sh` is used to install needed packages and also both resilient_circuits and any specified integrations from `resilient-community-apps`
-Before finishing some build dependancies are removed to try and keep the image size lean.
+Before finishing some build dependencies are removed to try and keep the image size lean.
 
 Through this second method the default behavior is you will end up with 1 docker image containing all your specified integrations and gives you a very portable integration server.
 
@@ -62,7 +88,7 @@ docker build -t circuits-fn-whois -f integration-images/Dockerfile-fn-whois .
 
 Contributions of Dockerfiles for new images are welcome.
 
-### Running
+### Running the container
 Create a valid app.config in the `circuits` directory and run your integration container, for example
 ```
 docker run --rm -d -v $PWD/circuits:/etc/circuits --name circuits-fn-whois circuits-fn-whois
@@ -71,7 +97,7 @@ To watch its logs use `docker logs -f circuits-fn-whois`.  To kill it `docker ki
 
 ## Building images and running containers - Alpine and Python
  
-## Building the Container 
+### Building the Images 
 
 Clone this repository to a server or system you want to run it on. 
 
@@ -101,7 +127,7 @@ This means you have packaged it ready for production - you can move this to anot
 
 In this case we are starting simple so we are going to launch it on the host. 
 
-## Configuring the container host 
+### Configuring the container host 
 
 You need to make sure you have an app config somewhere on the server - this must have the bare minimum configuration of below. On startup of the container it will run resilient-circuits config -u to check you have all the app configs loaded too. 
 
@@ -114,8 +140,16 @@ org=Example
 password=secret
 ```
 
-## Running the container 
+### Running the container 
 
 >`docker run --rm -v /some/path/.resilient:/app resilient_circuits`
 
 You will see Resilient Circuits Start. 
+
+## Note on entrypoints
+
+Provided are two entrypoint scripts which are referenced in the Dockerfiles as a part of the image building process. 
+
+`assets/simple-entrypoint.sh` contains just the command to start resilient-circuits
+`assets/entrypoint.sh` contains a command to start resilient-circuits and watches the app.config file for changes. 
+Before starting, the hash of the app.config file is recorded with `sha256sum` and if the app.config file is removed or updated with new entries, the next check of the file will cause the circuits process to be killed. This is particularly useful in a kubernetes context as kubernetes will manage the restarting of the killed container for us bringing the app.config changes into effect.
